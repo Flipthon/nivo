@@ -3,6 +3,7 @@ import { getProfile } from "@/lib/profile/queries";
 import { signOut } from "@/lib/auth/actions";
 import Link from "next/link";
 import { ProfileForm } from "./ProfileForm";
+import { CardsPanel, type CardView } from "./CardsPanel";
 
 export const metadata = { title: "Mais · Nivo" };
 
@@ -10,6 +11,11 @@ export default async function MaisPage() {
   const { supabase, user } = await requireUser();
   const profile = await getProfile(supabase, user.id);
   const allZones = Intl.supportedValuesOf("timeZone");
+  const { data: cards } = await supabase
+    .from("cards")
+    .select("id, name, kind, closing_day, due_day")
+    .is("archived_at", null)
+    .order("name");
 
   return (
     <>
@@ -25,6 +31,11 @@ export default async function MaisPage() {
           email={profile.email}
           allZones={allZones}
         />
+      </section>
+
+      <section className="panel" aria-labelledby="cartoes">
+        <h2 id="cartoes" style={{ marginBottom: 12 }}>Cartões</h2>
+        <CardsPanel cards={(cards ?? []) as CardView[]} />
       </section>
 
       <section className="panel" aria-labelledby="dados">

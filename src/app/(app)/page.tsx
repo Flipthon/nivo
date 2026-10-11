@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/auth/session";
 import { firstName, getProfile } from "@/lib/profile/queries";
 import { greeting, localMonthISO, monthLabel } from "@/lib/dates";
 import { formatCents } from "@/lib/money/format";
+import { getMonthTotals, hasAnyEntry } from "@/lib/transactions/queries";
 
 export const metadata = { title: "Início · Nivo" };
 
@@ -13,12 +14,11 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const profile = await getProfile(supabase, user.id);
   const now = new Date();
   const name = firstName(profile);
-  const month = monthLabel(localMonthISO(now, profile.timezone)); // ex.: "outubro de 2026"
+  const monthISO = localMonthISO(now, profile.timezone);
+  const month = monthLabel(monthISO); // ex.: "outubro de 2026"
   const monthName = month.split(" de ")[0];
 
-  // Os lançamentos chegam na etapa 2. Até lá não existe nenhum, então os totais são zero de verdade.
-  const totals = { income: 0, expense: 0 };
-  const hasEntries = false;
+  const [totals, hasEntries] = await Promise.all([getMonthTotals(supabase, monthISO), hasAnyEntry(supabase)]);
 
   return (
     <>

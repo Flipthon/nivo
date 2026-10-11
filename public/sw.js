@@ -1,7 +1,7 @@
 // Service worker do Nivo.
 // Regra de segurança: só arquivos estáticos e públicos vão para o cache.
 // Páginas e dados do usuário nunca são guardados; sem internet, aparece a página /offline.
-const VERSION = "nivo-v2";
+const VERSION = "nivo-v3";
 const STATIC_CACHE = `${VERSION}-static`;
 const OFFLINE_URL = "/offline";
 
