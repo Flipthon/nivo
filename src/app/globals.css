@@ -229,3 +229,5 @@ a { color: var(--primary); }
 .link-list a:first-child { border-top: 0; }
 .link-list .danger-link { color: var(--danger); }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+.google-btn { min-height: 44px; display: flex; justify-content: center; }
+.google-btn iframe { margin: 0 auto !important; }
