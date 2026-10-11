@@ -1,4 +1,4 @@
-import { NivoMark } from "@/components/NivoMark";
+import { NivoLogo } from "@/components/NivoMark";
 import { LoginPanel } from "./LoginPanel";
 import { LegalLinks } from "@/components/LegalLinks";
 import { safeNextPath } from "@/lib/auth/redirect";
@@ -13,11 +13,9 @@ export default async function LoginPage({
   const { erro, next, motivo } = await searchParams;
   return (
     <main className="login">
-      <div className="brand">
-        <NivoMark size={72} animated />
-        <h1>Nivo</h1>
-        <p className="lead">Controle seus gastos do mês conversando.</p>
-      </div>
+      <NivoLogo size={40} />
+      <h1>Seu dinheiro organizado em uma conversa.</h1>
+      <p className="lead">Conte um gasto como contaria a um amigo. O Nivo anota, organiza e mostra como está o seu mês.</p>
 
       {erro === "auth" && (
         <p className="login-alert" role="alert">
@@ -37,8 +35,10 @@ export default async function LoginPage({
 
       <LoginPanel next={safeNextPath(next)} />
 
-      <p className="fineprint">Seus lançamentos ficam visíveis só para você.</p>
-      <LegalLinks />
+      <div className="bottom">
+        <p className="fineprint">Seus lançamentos ficam visíveis só para você.</p>
+        <LegalLinks />
+      </div>
     </main>
   );
 }

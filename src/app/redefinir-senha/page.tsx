@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { NivoMark } from "@/components/NivoMark";
+import { NivoLogo } from "@/components/NivoMark";
 import { createClient } from "@/lib/supabase/server";
 import { NewPasswordForm } from "./NewPasswordForm";
 
@@ -12,11 +12,9 @@ export default async function RedefinirSenhaPage() {
 
   return (
     <main className="login">
-      <div className="brand">
-        <NivoMark size={56} />
-        <h1 style={{ fontSize: "2rem" }}>Crie uma nova senha</h1>
-        <p className="muted">Para {data.user.email}</p>
-      </div>
+      <NivoLogo size={36} />
+      <h1>Crie uma nova senha</h1>
+      <p className="lead" style={{ marginBottom: 24 }}>Para {data.user.email}</p>
       <NewPasswordForm />
     </main>
   );

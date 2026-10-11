@@ -1,7 +1,9 @@
-import { StageNotice } from "@/components/StageNotice";
+import Link from "next/link";
+import { HomeConversation } from "@/components/HomeConversation";
 import { requireUser } from "@/lib/auth/session";
 import { firstName, getProfile } from "@/lib/profile/queries";
-import { greeting, localMonthISO, longDateLabel, monthLabel } from "@/lib/dates";
+import { greeting, localMonthISO, monthLabel } from "@/lib/dates";
+import { formatCents } from "@/lib/money/format";
 
 export const metadata = { title: "Início · Nivo" };
 
@@ -11,29 +13,42 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
   const profile = await getProfile(supabase, user.id);
   const now = new Date();
   const name = firstName(profile);
+  const month = monthLabel(localMonthISO(now, profile.timezone)); // ex.: "outubro de 2026"
+  const monthName = month.split(" de ")[0];
+
+  // Os lançamentos chegam na etapa 2. Até lá não existe nenhum, então os totais são zero de verdade.
+  const totals = { income: 0, expense: 0 };
+  const hasEntries = false;
 
   return (
     <>
-      <header className="page-head">
-        <p className="date">{longDateLabel(now, profile.timezone)}</p>
-        <h1>{greeting(now, profile.timezone)}{name ? `, ${name}` : ""}</h1>
+      <header className="topbar">
+        <p className="hello">
+          {greeting(now, profile.timezone)}
+          {name ? "," : ""}
+          {name && <strong>{name}</strong>}
+        </p>
+        <Link href="/mais" className="avatar" aria-label="Perfil e configurações">
+          {(name ?? profile.email ?? "?").charAt(0).toUpperCase()}
+        </Link>
       </header>
 
-      {senha === "alterada" && <p className="login-ok" role="status" style={{ marginBottom: 12 }}>Senha alterada.</p>}
+      {senha === "alterada" && <p className="login-ok" role="status" style={{ margin: "0 0 12px" }}>Senha alterada.</p>}
 
-      <section className="panel month-card" aria-labelledby="mes">
-        <p className="muted">Seu mês em resumo</p>
-        <h2 id="mes">{monthLabel(localMonthISO(now, profile.timezone))}</h2>
-        <div className="vial" aria-hidden="true"><span className="bubble" /></div>
-        <p className="muted">
-          Receitas, despesas e saldo aparecem aqui quando os lançamentos estiverem disponíveis, na etapa 2.
-        </p>
+      <section className="month-card" aria-label={`Resumo de ${month}`}>
+        <div className="row">
+          <span>Saldo de {monthName}</span>
+          <span className="chip">{month.replace(" de ", " ")}</span>
+        </div>
+        <p className="balance">{formatCents(totals.income - totals.expense)}</p>
+        <p className="sub">Receitas menos despesas do mês</p>
+        <div className="split">
+          <div>Receitas<strong>{formatCents(totals.income)}</strong></div>
+          <div>Despesas<strong>{formatCents(totals.expense)}</strong></div>
+        </div>
       </section>
 
-      <StageNotice stage={2}>
-        É aqui embaixo que você vai contar seus gastos e receitas, escrevendo ou falando, como
-        &quot;almoço 35 e Uber 18&quot;. A conversa ainda não está ligada, então nada é enviado ou salvo por enquanto.
-      </StageNotice>
+      <HomeConversation showWelcome={!hasEntries} />
     </>
   );
 }

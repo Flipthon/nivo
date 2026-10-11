@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, ListOrdered, Menu } from "lucide-react";
+import { Home, List, MoreHorizontal } from "lucide-react";
 
 const ITEMS = [
   { href: "/", label: "Início", Icon: Home },
-  { href: "/lancamentos", label: "Lançamentos", Icon: ListOrdered },
-  { href: "/mais", label: "Mais", Icon: Menu },
+  { href: "/lancamentos", label: "Lançamentos", Icon: List },
+  { href: "/mais", label: "Mais", Icon: MoreHorizontal },
 ] as const;
 
 export function BottomNav() {

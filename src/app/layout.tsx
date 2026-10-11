@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Onest } from "next/font/google";
+import { Inter } from "next/font/google";
 import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
-const onest = Onest({ subsets: ["latin", "latin-ext"], variable: "--font-onest", display: "swap" });
+const inter = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Nivo",
@@ -20,12 +20,12 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#edf1f0",
+  themeColor: "#f7f8fc",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" className={onest.variable}>
+    <html lang="pt-BR" className={inter.variable}>
       <body>
         {children}
         <ServiceWorkerRegister />
